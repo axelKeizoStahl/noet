@@ -1,0 +1,22 @@
+{
+  "name": "noet",
+  "version": "1.0.0",
+  "description": "chat app to make an ai you",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axelKeizoStahl/noet.git"
+  },
+  "author": "Axel Stahl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/axelKeizoStahl/noet/issues"
+  },
+  "homepage": "https://github.com/axelKeizoStahl/noet#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
