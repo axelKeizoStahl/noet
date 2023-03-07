@@ -7,11 +7,12 @@ export default function Home(socket) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        localStorage.setUserName('userName', userName);
+        //localStorage.setUserName('userName', userName);
+        //socket.emit('newUser', (userName))
         navigate('/room')
     };
     return (
-        <form id="signinForm">
+        <form id="signinForm" onSubmit={handleSubmit}>
             <h1>Sign in to use</h1>
             <label htmlFor="username">UserName</label>
             <input 
@@ -21,7 +22,7 @@ export default function Home(socket) {
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
             />
-            <button id="signin">Sign In</button>
+            <button id="signin" type="submit">Sign In</button>
         </form>
     );
 };
