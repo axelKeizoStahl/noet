@@ -17,18 +17,33 @@ moongoose.connect(dbURI, { useNewUrlParser:true, useUnifiedTopology: true})
     .then((result) => console.log('connected to db'))
     .catch((err) => console.log(err));
 
+
+
+
+
 io.on('connection', (socket) => {
     console.log(`Connection from ${socket.id}`);
+
     socket.on('chat message', (msg) => {
         io.emit('back message', {
             message: msg,
             id: socket.id
         });
     });
+
+    socket.on('join', (room) => {
+        socket.join(room);
+    });
+
     socket.on('disconnection', () => {
         console.log(`a disconnection`)
     });
 });
+
+
+
+
+
 
 
 server.listen(4000, () => {
