@@ -1,6 +1,7 @@
 import React from "react";
 import Chat from "./Components/Chat";
 import Home from "./Components/Home";
+import Room from "./Components/room";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import socketIO from 'socket.io-client';
 
