@@ -5,6 +5,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const socketio = require('socket.io');
+const { addUser, getUsers, deleteUser, getUser } = require('./users');
 
 
 const io = socketio(server, {
@@ -25,18 +26,32 @@ const io = socketio(server, {
 io.on('connection', (socket) => {
     console.log(`Connection from ${socket.id}`);
 
-    socket.on('chat message', (msg) => {
-        console.log(socket.room);
-        io.to(socket.room).emit('back message', {
-            message: msg,
-            id: socket.id
-        });
+    socket.on('newUser', ({name, room}, callback) => {
+        const {user, error} = addUser(socket.id, name, room);
+        if (error) return callback(error);
+
+        socket.join(user.room);
+        
+        socket.in(room).emit('notification', {title: 'Someone is here', description: `${user.name} just entered the room`});
+        io.in(room).emit('users', getUsers(room));
+        io.in(room).emit('user', getUser(socket.id));
+        console.log(socket.id);
+        
     });
 
-    socket.on('join', (room) => {
-        console.log(socket.id)
-        socket.join(room);
+
+    socket.on('message', (msg) => {
+        console.log('bla')
+        const user = getUser(socket.id);
+        io.in(user.room).emit('sendMessage', {userName: user.name, message: msg});
     });
+
+    //for development purposes:
+//    socket.onAny((event, ...args)=> {
+//        console.log(event, args);
+//    })
+
+    
 
     socket.on('disconnection', () => {
         console.log(`a disconnection`)
