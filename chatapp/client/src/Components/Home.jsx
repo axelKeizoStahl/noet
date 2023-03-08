@@ -10,6 +10,7 @@ export default function Home(socket) {
         //localStorage.setUserName('userName', userName);
         //socket.emit('newUser', (userName))
         navigate('/room')
+        console.log(socket.id)
     };
     return (
         <form id="signinForm" onSubmit={handleSubmit}>

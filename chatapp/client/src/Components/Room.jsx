@@ -1,12 +1,20 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Room(socket) {
+export default function Room({ socket }) {
+
+    const navigate = useNavigate();
 
     const room = (e) => {
+        console.log(socket.id)
         e.preventDefault();
         var input = document.getElementById("roominput");
-        socket.emit('join', input.value);
-        input.value = '';
+        if (input.value) {
+            socket.emit('join', input.value);
+            input.value = '';
+            navigate('/chat')
+        }
+        
     };
 
     return(
