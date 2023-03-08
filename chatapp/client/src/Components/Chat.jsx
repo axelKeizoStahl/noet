@@ -14,7 +14,9 @@ export default function Chat({ socket }) {
     };
 
     useEffect(() => {
+        console.log(socket.id)
         socket.on('back message', function(msg) {
+            console.log('message reecevied');
             var messages = document.getElementById("messages");
             var item = document.createElement('li');
             var message = msg.message;
