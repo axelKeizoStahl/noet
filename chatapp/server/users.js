@@ -16,7 +16,7 @@ const addUser = (id, name, room) => {
 
 const getUser = id => {
     let user = users.find(user => user.id == id)
-    return user
+    return { user }
 }
 
 const deleteUser = (id) => {
