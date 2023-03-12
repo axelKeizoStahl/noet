@@ -26,15 +26,15 @@ const io = socketio(server, {
 io.on('connection', (socket) => {
     console.log(`Connection from ${socket.id}`);
 
-    socket.on('newUser', ({name, room}, callback) => {
-        const {user, error} = addUser(socket.id, name, room);
-        if (error) return callback(error);
+    socket.on('newUser', (login) => {
+        var {user, error} = addUser(socket.id, login.username, login.room);
+
 
         socket.join(user.room);
         
-        socket.in(room).emit('notification', {title: 'Someone is here', description: `${user.name} just entered the room`});
-        io.in(room).emit('users', getUsers(room));
-        io.in(room).emit('user', getUser(socket.id));
+        socket.in(user.room).emit('notification', {title: 'Someone is here', description: `${user.name} just entered the room`});
+        io.in(user.room).emit('users', getUsers(user.room));
+        io.in(user.room).emit('user', getUser(socket.id));
         console.log(socket.id);
         
     });
@@ -42,7 +42,9 @@ io.on('connection', (socket) => {
 
     socket.on('message', (msg) => {
         console.log('bla')
-        const user = getUser(socket.id);
+        var user = getUser(socket.id);
+        console.log(socket.rooms);
+        console.log(user.room)
         io.in(user.room).emit('sendMessage', {userName: user.name, message: msg});
     });
 
