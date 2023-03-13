@@ -1,5 +1,4 @@
-const mongo = require('mongodb');
-const moongoose = require('mongoose');
+const {MongoClient} = require('mongodb');
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -14,12 +13,40 @@ const io = socketio(server, {
     }
 });
 
-//const dbURI = "mongodb+srv://jojo:test1234@noet0.alby9bm.mongodb.net/?retryWrites=true&w=majority";
-//moongoose.connect(dbURI, { useNewUrlParser:true, useUnifiedTopology: true})
-//    .then((result) => console.log('connected to db'))
-//    .catch((err) => console.log(err));
 
 
+const uri = "mongodb+srv://jojo:test1234@noet0.alby9bm.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri);
+
+async function chatops(doc, operation) {
+    try {
+        const database = client.db("Noet-chats")
+        const chats = database.collection("chats");
+
+        if (operation == "message") {
+            const query = {room: doc.room};
+            const newvalue = {
+                user: doc.username,
+                message: doc.name
+            };
+            const chats.updateOne(query, newvalue, db.close());
+        }
+    }
+}
+
+
+
+
+
+async function listDatabases(client){
+    databasesList = await client.db().admin().listDatabases();
+
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+};
+
+
+main().catch(console.error);
 
 
 
@@ -46,6 +73,7 @@ io.on('connection', (socket) => {
         console.log(socket.rooms);
         console.log(user.room)
         io.in(user.room).emit('sendMessage', {userName: user.name, message: msg});
+        chatops({userName: user.name, message: msg}, "message")
     });
 
     //for development purposes:
