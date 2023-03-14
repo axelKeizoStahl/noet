@@ -4,10 +4,13 @@ const { MongoClient } = require("mongodb");
 
 const uri = "mongodb+srv://jojo:test1234@noet0.alby9bm.mongodb.net/?retryWrites=true&w=majority";
 
-const client = new MongoClient(uri);
+
 
 async function dboperation(doc, operation) {
+    const client = new MongoClient(uri);
     try {
+        
+
         const database = client.db("Noet-chats");
         const dbusers = database.collection("users");
         const dbchats = database.collection("chats");
@@ -20,13 +23,13 @@ async function dboperation(doc, operation) {
             await dbusers.deleteOne(doc);
 
             console.log('deleted');
-        } else if (operation == "addroom") {
+        } /*else if (operation == "addroom") {
             const existingroom = users.find(user => user.room.trim().toLowerCase() === doc.room.trim().toLowerCase())
             if (!existingroom) await dbchats.insertOne({
                 room: doc.room,
                 messages: []
-            });
-        };
+            });*/
+        
     } finally {
         await client.close();
     };
@@ -50,7 +53,7 @@ const addUser = (id, name, room) => {
 
     dboperation(user, "add");
 
-    dboperation(user, "addroom");
+    //dboperation(user, "addroom");
 
     return { user };
 }
