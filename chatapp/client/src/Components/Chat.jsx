@@ -33,7 +33,7 @@ export default function Chat({ socket }) {
             console.log(sender);
             item.innerHTML = `<em>${sender}:</em>  ${message}`;
             messages.appendChild(item);
-            //window.scrollTo(0, document.body.scrollHeight);
+            window.scrollTo(0, document.body.scrollHeight);
         });
     });
 
