@@ -23,13 +23,14 @@ async function dboperation(doc, operation) {
             await dbusers.deleteOne(doc);
 
             console.log('deleted');
-        } /*else if (operation == "addroom") {
-            const existingroom = users.find(user => user.room.trim().toLowerCase() === doc.room.trim().toLowerCase())
-            if (!existingroom) await dbchats.insertOne({
-                room: doc.room,
-                messages: []
-            });*/
-        
+        } else if (operation == "addroom") {
+            if (!users.find(user => user.room === doc.room)) {
+                dbchats.insertOne({room: doc.room, messages: []})
+            }
+            //console.log(existingroom)
+            //if (!existingroom) await console.log('hi')
+            //console.log()
+        }
     } finally {
         await client.close();
     };
@@ -49,11 +50,13 @@ const addUser = (id, name, room) => {
     if (!room) return { error: "Room is required" };
 
     const user = { id, name, room };
+    
+    dboperation(user, "addroom");
     users.push(user);
 
     dboperation(user, "add");
 
-    //dboperation(user, "addroom");
+    
 
     return { user };
 }
