@@ -16,21 +16,28 @@ const io = socketio(server, {
 
 
 const uri = "mongodb+srv://jojo:test1234@noet0.alby9bm.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri);
+
 
 async function chatops(doc, operation) {
+    client = new MongoClient(uri);
     try {
         const database = client.db("Noet-chats")
         const chats = database.collection("chats");
 
         if (operation == "message") {
-            const query = {room: doc.room};
-            const newvalue = {
+            const query = {"room": doc.room};
+            const newvalue = {$push: {messages: {
                 user: doc.username,
                 message: doc.name
-            };
-            const chats.updateOne(query, newvalue, db.close());
+            }
         }
+
+        }
+            chats.updateOne(query, newvalue);
+            console.log('ad')
+        } 
+    }finally {
+        client.close();
     }
 }
 
@@ -46,7 +53,7 @@ async function listDatabases(client){
 };
 
 
-main().catch(console.error);
+
 
 
 
